@@ -45,8 +45,8 @@
     },
     methods: {
       itemClick() {
-        //.catch((error) => error) 解决双击报错
-        this.$router.replace(this.path).catch((error) => error);
+        //.catch((error) => error) 解决双击报错this.$router.replace(this.path).catch((error) => error)
+        this.$router.replace(this.path);
       }
     },
   }
