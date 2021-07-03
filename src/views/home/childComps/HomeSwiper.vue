@@ -14,6 +14,7 @@
   import {Swiper, SwiperItem} from 'components/common/swiper'
   export default {
     name: 'HomeSwiper',
+    // 获取数据
     props: {
       banners: {
         type: Array,
