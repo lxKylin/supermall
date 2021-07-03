@@ -4,7 +4,13 @@
     <home-swiper :banners="banners"></home-swiper>
     <home-recommend-view :recommends="recommends"></home-recommend-view>
     <home-feature-view></home-feature-view>
-    <tab-control class="tab-control" :title="['流行', '新款', '精选']"></tab-control>
+    <tab-control
+      class="tab-control"
+      :title="['流行', '新款', '精选']"
+      @tabClick="tabClick">
+    </tab-control>
+    <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
+    <goods-list :goods="showGoods"></goods-list>
     <ul>
       <li>1</li>
       <li>2</li>
@@ -57,9 +63,13 @@
   import HomeFeatureView from './childComps/HomeFeatureView'
 
   import NavBar from 'components/common/navbar/NavBar'
+
   import TabControl from 'components/content/tabControl/TabControl'
+  import GoodsList from 'components/content/goods/GoodsList'
+  import GoodsListItem from 'components/content/goods/GoodsListItem'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
+
 
   // import {Swiper, SwiperItem} from 'components/common/swiper'
 
@@ -71,6 +81,8 @@
       HomeFeatureView,
       NavBar,
       TabControl,
+      GoodsList,
+      GoodsListItem,
     },
     data() {
       return {
@@ -83,7 +95,13 @@
           'pop': {page: 0, list: []},
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []},
-        }
+        },
+        currentType: 'pop',
+      }
+    },
+    computed: {
+      showGoods() {
+        return this.goods[this.currentType].list
       }
     },
     // 生命周期函数 创建完后马上执行
@@ -94,10 +112,30 @@
       this.getHomeGoods('pop')
 
       this.getHomeGoods('new')
-      
+
       this.getHomeGoods('sell')
     },
     methods: {
+      /**
+       * 事件监听的方法
+       */
+      tabClick(index) {
+        // console.log(index);
+        switch (index) {
+          case 0:
+            this.currentType = 'pop';
+            break;
+          case 1:
+            this.currentType = 'new';
+            break;
+          case 2:
+            this.currentType = 'sell';
+            break;
+        }
+      },
+      /**
+       * 网络请求相关的方法
+       */
       getHomeMultidata() {
         getHomeMultidata().then(res => {
           // console.log(res);
@@ -138,5 +176,6 @@
     /* 粘性定位 */
     position: sticky;
     top: 44px;
+    z-index: 9;
   }
 </style>

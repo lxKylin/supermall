@@ -30,6 +30,8 @@
     methods: {
       itemClick(index) {
         this.currentIndex = index;
+        // 往外传数据
+        this.$emit('tabClick', index)
       }
     },
   }
@@ -42,7 +44,7 @@
     font-size: 15px;
     height: 40px;
     line-height: 40px;
-  background-color: #fff;
+    background-color: #fff;
   }
   .tab-control-item {
     flex: 1;
