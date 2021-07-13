@@ -2,7 +2,7 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
@@ -14,8 +14,8 @@
       <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
-
-    <back-top></back-top>
+    <!-- 组件不能直接监听点击 若需要 添加.native-->
+    <back-top @click.native="backClick"></back-top>
   </div>
 </template>
 
@@ -100,6 +100,10 @@
             break;
         }
       },
+      backClick() {
+        // 500ms 内回到顶部
+        this.$refs.scroll.scrollTo(0, 0, 500)
+      },
       /**
        * 网络请求相关的方法
        */
@@ -119,7 +123,8 @@
           this.goods[type].list.push(...res.data.list);
           this.goods[type].page += 1;
         })
-      }
+      },
+
     },
   }
 </script>
