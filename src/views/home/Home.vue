@@ -13,49 +13,9 @@
       </tab-control>
       <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
       <goods-list :goods="showGoods"></goods-list>
-      <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>4</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>7</li>
-          <li>8</li>
-          <li>9</li>
-          <li>0</li>
-      </ul>
     </scroll>
+
+    <back-top></back-top>
   </div>
 </template>
 
@@ -71,11 +31,9 @@
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
   import GoodsListItem from 'components/content/goods/GoodsListItem'
+  import BackTop from 'components/content/backTop/BackTop'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
-
-
-
 
 
   // import {Swiper, SwiperItem} from 'components/common/swiper'
@@ -90,7 +48,8 @@
       Scroll,
       TabControl,
       GoodsList,
-      GoodsListItem
+      GoodsListItem,
+      BackTop
     },
     data() {
       return {
@@ -188,6 +147,7 @@
     z-index: 9;
   }
   .content {
+    /* 动态计算高度 */
     height: calc(100vh - 93px);
     /* overflow: hidden; */
   }
