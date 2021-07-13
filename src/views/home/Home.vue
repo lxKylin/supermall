@@ -1,58 +1,61 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <home-recommend-view :recommends="recommends"></home-recommend-view>
-    <home-feature-view></home-feature-view>
-    <tab-control
-      class="tab-control"
-      :title="['流行', '新款', '精选']"
-      @tabClick="tabClick">
-    </tab-control>
-    <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
-    <goods-list :goods="showGoods"></goods-list>
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>4</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>0</li>
-    </ul>
+
+    <scroll class="content">
+      <home-swiper :banners="banners"></home-swiper>
+      <home-recommend-view :recommends="recommends"></home-recommend-view>
+      <home-feature-view></home-feature-view>
+      <tab-control
+        class="tab-control"
+        :title="['流行', '新款', '精选']"
+        @tabClick="tabClick">
+      </tab-control>
+      <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
+      <goods-list :goods="showGoods"></goods-list>
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>4</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>7</li>
+          <li>8</li>
+          <li>9</li>
+          <li>0</li>
+      </ul>
+    </scroll>
   </div>
 </template>
 
@@ -63,12 +66,16 @@
   import HomeFeatureView from './childComps/HomeFeatureView'
 
   import NavBar from 'components/common/navbar/NavBar'
+  import Scroll from 'components/common/scroll/Scroll'
 
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
   import GoodsListItem from 'components/content/goods/GoodsListItem'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
+
+
+
 
 
   // import {Swiper, SwiperItem} from 'components/common/swiper'
@@ -80,9 +87,10 @@
       HomeRecommendView,
       HomeFeatureView,
       NavBar,
+      Scroll,
       TabControl,
       GoodsList,
-      GoodsListItem,
+      GoodsListItem
     },
     data() {
       return {
@@ -158,6 +166,7 @@
 </script>
 
 <style scoped>
+  /* scoped 作用域 只在当前组件生效*/
   /* #home {
     padding-top: 44px;
   } */
@@ -177,5 +186,9 @@
     position: sticky;
     top: 44px;
     z-index: 9;
+  }
+  .content {
+    height: calc(100vh - 93px);
+    /* overflow: hidden; */
   }
 </style>
