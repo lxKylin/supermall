@@ -18,10 +18,10 @@
         defaolt: 0
       },
       // 上拉加载
-      // pullUpLoad: {
-      //   type: Boolean,
-      //   default: false
-      // },
+      pullUpLoad: {
+        type: Boolean,
+        default: false
+      },
     },
     data() {
       return {
@@ -29,7 +29,7 @@
       }
     },
     mounted() {
-      // 1.创建better-scroll对象
+      // 1.创建BScroll对象
       this.scroll = new BScroll(this.$refs.wrapper, {
         // 确定连接能点击
         click: true,
@@ -41,21 +41,25 @@
         pullUpLoad: this.pullUpLoad,
       })
       // 2.监听滚动的位置
-      this.scroll.on('scroll', (position) => {
-        // console.log(position);
-        this.$emit('scroll', position)
-      })
+      if (this.probeType === 2 || this.probeType ===3) {
+        this.scroll.on('scroll', (position) => {
+          // console.log(position);
+          this.$emit('scroll', position)
+        })
+      }
       // 根据最新的 各种子组件 重新计算高度
       this.scroll.refresh()
+      
       // 3.监听上拉加载事件
-      // this.scroll.on('pullingUp', () => {
-      //   // console.log('上拉加载更多');
-      //   // 延迟500 ms
-      //   setTimeout(() => {
-      //     this.$emit('pullingUp')
-      //   }, 500)
-
-      // })
+      if (this.pullUpLoad) {
+        this.scroll.on('pullingUp', () => {
+        // console.log('上拉加载更多');
+        // 延迟500 ms
+        setTimeout(() => {
+          this.$emit('pullingUp')
+        }, 500)
+       })
+      }
     },
     methods: {
       scrollTo(x, y, time) {
@@ -65,7 +69,6 @@
         this.scroll && this.scroll.finishPullUp()
       },
       refresh() {
-        console.log('-----');
         this.scroll && this.scroll.refresh()
       }
     },

@@ -7,7 +7,7 @@
     ref="scroll"
     :probe-type="3"
     @scroll="contentscroll"
-    :pull-up-load="true">
+    :pull-up-load="true" @pullingUp="loadMore">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
@@ -39,6 +39,7 @@
   import BackTop from 'components/content/backTop/BackTop'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
+  import {debounce} from 'common/utils'
 
 
   // import {Swiper, SwiperItem} from 'components/common/swiper'
@@ -91,7 +92,7 @@
     },
     mounted() {
       // 防抖
-      const refresh = this.debounce(this.$refs.scroll.refresh, 50)
+      const refresh = debounce(this.$refs.scroll.refresh, 50)
       // 3.item中图片加载完成
       this.$bus.$on('itemImageLoad', () => {
         // console.log('-------'); // 30次 以至于下面的会调用很多次
@@ -136,12 +137,12 @@
         // console.log(position);
         this.isShowBackTop = (-position.y) > 1000
       },
-      // loadMore() {
-      //   // console.log('加载更多');
-      //   this.getHomeGoods(this.currentType);
-      //   // 重新计算可滑动高度
-      //   this.$refs.scroll.scroll.refresh();
-      // },
+      loadMore() {
+        // console.log('加载更多');
+        this.getHomeGoods(this.currentType);
+        // 重新计算可滑动高度
+        this.$refs.scroll.scroll.refresh();
+      },
       /**
        * 网络请求相关的方法
        */
@@ -160,7 +161,7 @@
           this.goods[type].page += 1;
 
           // 上拉加载
-          // this.$refs.scroll.finishPullUp()
+          this.$refs.scroll.finishPullUp()
         })
       },
 
