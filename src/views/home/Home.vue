@@ -2,7 +2,13 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
-    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentscroll">
+    <scroll
+    class="content"
+    ref="scroll"
+    :probe-type="3"
+    @scroll="contentscroll"
+    :pull-up-load="true"
+    @pullingUp="loadMore">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
@@ -109,6 +115,12 @@
         // console.log(position);
         this.isShowBackTop = (-position.y) > 1000
       },
+      loadMore() {
+        // console.log('加载更多');
+        this.getHomeGoods(this.currentType);
+        // 重新计算可滑动高度
+        this.$refs.scroll.scroll.refresh();
+      },
       /**
        * 网络请求相关的方法
        */
@@ -127,6 +139,8 @@
           // this.goods[type].list = this.goods[type].list.push(res.data.list);
           this.goods[type].list.push(...res.data.list);
           this.goods[type].page += 1;
+
+          this.$refs.scroll.finishPullUp()
         })
       },
 
