@@ -122,7 +122,8 @@
         // probe 侦测
         // 3 只要滚动都侦测
         probeType: 3,
-        pullUpLoad: true
+        pullUpLoad: true,
+        click: true
       })
       this.scroll.on('scroll', (position) => {
         // console.log(position);

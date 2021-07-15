@@ -31,7 +31,7 @@
       itemClick(index) {
         this.currentIndex = index;
         // 往外传数据
-        this.$emit('tabClick', index)
+        this.$emit('tabClick', index);
       }
     },
   }

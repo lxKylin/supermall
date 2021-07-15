@@ -2,7 +2,7 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
-    <scroll class="content" ref="scroll">
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentscroll">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
@@ -15,7 +15,7 @@
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
     <!-- 组件不能直接监听点击 若需要 添加.native-->
-    <back-top @click.native="backClick"></back-top>
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -64,6 +64,7 @@
           'sell': {page: 0, list: []},
         },
         currentType: 'pop',
+        isShowBackTop: false,
       }
     },
     computed: {
@@ -103,6 +104,10 @@
       backClick() {
         // 500ms 内回到顶部
         this.$refs.scroll.scrollTo(0, 0, 500)
+      },
+      contentscroll(position) {
+        // console.log(position);
+        this.isShowBackTop = (-position.y) > 1000
       },
       /**
        * 网络请求相关的方法

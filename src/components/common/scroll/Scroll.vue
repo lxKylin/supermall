@@ -11,16 +11,33 @@
 
   export default {
     name: 'Scroll',
+    props: {
+      probeType: {
+        type: Number,
+        defaolt: 0
+      }
+    },
     data() {
       return {
         scroll: null
       }
     },
     mounted() {
+      // 创建better-scroll对象
       this.scroll = new BScroll(this.$refs.wrapper, {
-
+        // 确定连接能点击
+        click: true,
+        // probe 侦测
+        // 3 只要滚动都侦测
+        // probeType: 3
+        // 动态传入是否需要动态监听位置值
+        probeType: this.probeType
       })
-      this.scroll.scrollTo(0, 0)
+      // 监听滚动的位置
+      this.scroll.on('scroll', (position) => {
+        // console.log(position);
+        this.$emit('scroll', position)
+      })
     },
     methods: {
       scrollTo(x, y, time) {
