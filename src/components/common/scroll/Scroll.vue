@@ -18,10 +18,10 @@
         defaolt: 0
       },
       // 上拉加载
-      pullUpLoad: {
-        type: Boolean,
-        default: false
-      },
+      // pullUpLoad: {
+      //   type: Boolean,
+      //   default: false
+      // },
     },
     data() {
       return {
@@ -45,22 +45,28 @@
         // console.log(position);
         this.$emit('scroll', position)
       })
+      // 根据最新的 各种子组件 重新计算高度
+      this.scroll.refresh()
       // 3.监听上拉加载事件
-      this.scroll.on('pullingUp', () => {
-        // console.log('上拉加载更多');
-        // 延迟500 ms
-        setTimeout(() => {
-          this.$emit('pullingUp')
-        }, 500)
+      // this.scroll.on('pullingUp', () => {
+      //   // console.log('上拉加载更多');
+      //   // 延迟500 ms
+      //   setTimeout(() => {
+      //     this.$emit('pullingUp')
+      //   }, 500)
 
-      })
+      // })
     },
     methods: {
       scrollTo(x, y, time) {
-        this.scroll.scrollTo(x, y, time)
+        this.scroll && this.scroll.scrollTo(x, y, time)
       },
       finishPullUp() {
-        this.scroll.finishPullUp()
+        this.scroll && this.scroll.finishPullUp()
+      },
+      refresh() {
+        console.log('-----');
+        this.scroll && this.scroll.refresh()
       }
     },
   }

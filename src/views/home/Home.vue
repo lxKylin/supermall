@@ -7,8 +7,7 @@
     ref="scroll"
     :probe-type="3"
     @scroll="contentscroll"
-    :pull-up-load="true"
-    @pullingUp="loadMore">
+    :pull-up-load="true">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
@@ -88,11 +87,33 @@
       this.getHomeGoods('new')
 
       this.getHomeGoods('sell')
+
+    },
+    mounted() {
+      // 防抖
+      const refresh = this.debounce(this.$refs.scroll.refresh, 50)
+      // 3.item中图片加载完成
+      this.$bus.$on('itemImageLoad', () => {
+        // console.log('-------'); // 30次 以至于下面的会调用很多次
+        refresh()
+      })
     },
     methods: {
       /**
        * 事件监听的方法
        */
+      //  防抖函数  debounce(func, delay) 函数   时间
+      debounce(func, delay) {
+        let timer = null
+
+        return function (...args) {
+          if (timer)  clearTimeout(timer)
+
+          timer = setTimeout(() => {
+            func.apply(this, args)
+          }, delay)
+        }
+      },
       tabClick(index) {
         // console.log(index);
         switch (index) {
@@ -115,19 +136,17 @@
         // console.log(position);
         this.isShowBackTop = (-position.y) > 1000
       },
-      loadMore() {
-        // console.log('加载更多');
-        this.getHomeGoods(this.currentType);
-        // 重新计算可滑动高度
-        this.$refs.scroll.scroll.refresh();
-      },
+      // loadMore() {
+      //   // console.log('加载更多');
+      //   this.getHomeGoods(this.currentType);
+      //   // 重新计算可滑动高度
+      //   this.$refs.scroll.scroll.refresh();
+      // },
       /**
        * 网络请求相关的方法
        */
       getHomeMultidata() {
         getHomeMultidata().then(res => {
-          // console.log(res);
-          // this.result = res;
           this.banners = res.data.banner.list;
           this.recommends = res.data.recommend.list;
         })
@@ -140,7 +159,8 @@
           this.goods[type].list.push(...res.data.list);
           this.goods[type].page += 1;
 
-          this.$refs.scroll.finishPullUp()
+          // 上拉加载
+          // this.$refs.scroll.finishPullUp()
         })
       },
 
@@ -156,7 +176,6 @@
   .home-nav {
     color: #fff;
     background-color: var(--color-tint);
-    /* position: fixed; */
     /* 粘性定位 */
     position: sticky;
     top: 0;
