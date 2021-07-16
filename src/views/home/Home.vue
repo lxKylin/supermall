@@ -15,18 +15,19 @@
       :probe-type="3"
       @scroll="contentscroll"
       :pull-up-load="true" @pullingUp="loadMore">
-      <home-swiper
-      :banners="banners"
-      @swiperImageLoad="swiperImageLoad"></home-swiper>
-      <home-recommend-view :recommends="recommends"></home-recommend-view>
-      <home-feature-view></home-feature-view>
-      <tab-control
-        :title="['流行', '新款', '精选']"
-        @tabClick="tabClick"
-        ref="tabControl2">
-      </tab-control>
-      <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
-      <goods-list :goods="showGoods"></goods-list>
+        <home-swiper
+          :banners="banners"
+          @swiperImageLoad="swiperImageLoad">
+        </home-swiper>
+        <home-recommend-view :recommends="recommends"></home-recommend-view>
+        <home-feature-view></home-feature-view>
+        <tab-control
+          :title="['流行', '新款', '精选']"
+          @tabClick="tabClick"
+          ref="tabControl2">
+        </tab-control>
+        <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
+        <goods-list :goods="showGoods"></goods-list>
     </scroll>
     <!-- 组件不能直接监听点击 若需要 添加.native-->
     <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
