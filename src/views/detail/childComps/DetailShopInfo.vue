@@ -1,7 +1,7 @@
 <template>
   <div class="shop-info">
-    <div>
-      <img :src="shop.logo" alt="">
+    <div class="shop-top">
+      <img :src="shop.logo">
       <span class="title">{{shop.name}}</span>
     </div>
     <div class="shop-middle">
@@ -23,10 +23,8 @@
         <table>
           <tr v-for="(item, index) in shop.score" :key="index">
             <td>{{item.name}}</td>
-            <td class="score" :class="{'score-better':item.isBetter}">{{item.score}}</td>
-            <td class="better" :class="{'better-more':item.isBetter}">
-              <span>{{item.isBetter ? '高' : '低'}}</span>
-            </td>
+            <td class="score" :class="{'score-better': item.isBetter}">{{item.score}}</td>
+            <td class="better" :class="{'better-more': item.isBetter}"><span>{{item.isBetter ? '高':'低'}}</span></td>
           </tr>
         </table>
       </div>
@@ -38,23 +36,23 @@
 </template>
 
 <script>
-  export default {
-    name: 'DetailShopInfo',
+	export default {
+		name: "DetailShopInfo",
     props: {
-      shop: {
-        type: Object,
+		  shop: {
+		    type: Object,
         default() {
-          return {}
+		      return {}
         }
       }
     },
     filters: {
-      sellCountFilter: function(value) {
+      sellCountFilter: function (value) {
         if (value < 10000) return value;
         return (value/10000).toFixed(1) + '万'
       }
     }
-  }
+	}
 </script>
 
 <style scoped>
