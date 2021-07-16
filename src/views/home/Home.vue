@@ -223,8 +223,4 @@
     height: calc(100vh - 93px);
     overflow: hidden;
   }
-  .tab-control {
-    position: relative;
-    z-index: 9;
-  }
 </style>
