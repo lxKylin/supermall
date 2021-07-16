@@ -1,20 +1,29 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+    <tab-control
+        :title="['流行', '新款', '精选']"
+        @tabClick="tabClick"
+        ref="tabControl1"
+        class="tab-control"
+        v-show="isTabFixed">
+      </tab-control>
 
     <scroll
-    class="content"
-    ref="scroll"
-    :probe-type="3"
-    @scroll="contentscroll"
-    :pull-up-load="true" @pullingUp="loadMore">
-      <home-swiper :banners="banners"></home-swiper>
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="contentscroll"
+      :pull-up-load="true" @pullingUp="loadMore">
+      <home-swiper
+      :banners="banners"
+      @swiperImageLoad="swiperImageLoad"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
       <tab-control
-        class="tab-control"
         :title="['流行', '新款', '精选']"
-        @tabClick="tabClick">
+        @tabClick="tabClick"
+        ref="tabControl2">
       </tab-control>
       <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
       <goods-list :goods="showGoods"></goods-list>
@@ -71,12 +80,22 @@
         },
         currentType: 'pop',
         isShowBackTop: false,
+        tabOffsetTop: 0,
+        isTabFixed: false,
+        saveY: 0,
       }
     },
     computed: {
       showGoods() {
         return this.goods[this.currentType].list
       }
+    },
+    activated() {
+      this.$refs.scroll.scrollTo(0, this.saveY, 0);
+      this.$refs.scroll.refresh();
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.scroll.y;
     },
     // 生命周期函数 创建完后马上执行
     created() {
@@ -98,6 +117,8 @@
         // console.log('-------'); // 30次 以至于下面的会调用很多次
         refresh()
       })
+
+
     },
     methods: {
       /**
@@ -128,20 +149,32 @@
             this.currentType = 'sell';
             break;
         }
+        this.$refs.tabControl1.currentIndex = index;
+        this.$refs.tabControl2.currentIndex = index;
       },
       backClick() {
         // 500ms 内回到顶部
         this.$refs.scroll.scrollTo(0, 0, 500)
       },
       contentscroll(position) {
+        // 1.判断backTop是否显示
         // console.log(position);
         this.isShowBackTop = (-position.y) > 1000
+
+        // 2.决定tabControl是否吸顶(position: fixed)
+        this.isTabFixed = (-position.y) > this.tabOffsetTop
       },
       loadMore() {
         // console.log('加载更多');
         this.getHomeGoods(this.currentType);
         // 重新计算可滑动高度
         this.$refs.scroll.scroll.refresh();
+      },
+      swiperImageLoad() {
+        // 获取tabControl的offsetTop值
+        // 所有的组件都有一个属性$el，用于获取组件中的元素
+        // console.log(this.$refs.tabControl.$el.offsetTop);
+        this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
       },
       /**
        * 网络请求相关的方法
@@ -178,21 +211,20 @@
     color: #fff;
     background-color: var(--color-tint);
     /* 粘性定位 */
-    position: sticky;
+    /* position: sticky; */
+    /* position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 9;
-  }
-  .tab-control {
-    /* 粘性定位 */
-    position: sticky;
-    top: 44px;
-    z-index: 9;
+    z-index: 9; */
   }
   .content {
     /* 动态计算高度 */
     height: calc(100vh - 93px);
-    /* overflow: hidden; */
+    overflow: hidden;
+  }
+  .tab-control {
+    position: relative;
+    z-index: 9;
   }
 </style>
