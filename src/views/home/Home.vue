@@ -46,11 +46,11 @@
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
   import GoodsListItem from 'components/content/goods/GoodsListItem'
-  import BackTop from 'components/content/backTop/BackTop'
+  // import BackTop from 'components/content/backTop/BackTop'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
 
-  import {itemListenerMixin} from 'common/mixin'
+  import {itemListenerMixin, backTopMixin} from 'common/mixin'
 
   export default {
     name: 'Home',
@@ -63,9 +63,9 @@
       TabControl,
       GoodsList,
       GoodsListItem,
-      BackTop,
+      // BackTop,
     },
-    mixins: [itemListenerMixin],
+    mixins: [itemListenerMixin, backTopMixin],
     data() {
       return {
         // 定义个变量将请求的数据保存 初始化为null
@@ -79,7 +79,7 @@
           'sell': {page: 0, list: []},
         },
         currentType: 'pop',
-        isShowBackTop: false,
+        // isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
         saveY: 0,
@@ -157,10 +157,10 @@
         this.$refs.tabControl1.currentIndex = index;
         this.$refs.tabControl2.currentIndex = index;
       },
-      backClick() {
-        // 500ms 内回到顶部
-        this.$refs.scroll.scrollTo(0, 0, 500)
-      },
+      // backClick() {
+      //   // 500ms 内回到顶部
+      //   this.$refs.scroll.scrollTo(0, 0, 500)
+      // },
       contentscroll(position) {
         // 1.判断backTop是否显示
         // console.log(position);
