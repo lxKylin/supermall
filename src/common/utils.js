@@ -21,7 +21,7 @@ export function formatDate(date, fmt) {
   let o = {
     'M+': date.getMonth() + 1,
     'd+': date.getDate(),
-    'h+': date.getHours(),
+    'h+': date.getHours(),  // h H
     'm+': date.getMinutes(),
     's+': date.getSeconds()
   };
