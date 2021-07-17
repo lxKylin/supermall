@@ -49,10 +49,8 @@
   import BackTop from 'components/content/backTop/BackTop'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
-  import {debounce} from 'common/utils'
 
-
-  // import {Swiper, SwiperItem} from 'components/common/swiper'
+  import {itemListenerMixin} from 'common/mixin'
 
   export default {
     name: 'Home',
@@ -65,8 +63,9 @@
       TabControl,
       GoodsList,
       GoodsListItem,
-      BackTop
+      BackTop,
     },
+    mixins: [itemListenerMixin],
     data() {
       return {
         // 定义个变量将请求的数据保存 初始化为null
@@ -84,6 +83,7 @@
         tabOffsetTop: 0,
         isTabFixed: false,
         saveY: 0,
+        // itemImgListener: null,
       }
     },
     computed: {
@@ -96,7 +96,11 @@
       this.$refs.scroll.refresh();
     },
     deactivated() {
+      // 1.保存y值
       this.saveY = this.$refs.scroll.scroll.y;
+
+      // 2.取消全局事件的监听
+      this.$bus.$off('itemImgLoad', this.itemImgListener)
     },
     // 生命周期函数 创建完后马上执行
     created() {
@@ -112,14 +116,14 @@
     },
     mounted() {
       // 防抖
-      const refresh = debounce(this.$refs.scroll.refresh, 50)
-      // 3.item中图片加载完成
-      this.$bus.$on('itemImageLoad', () => {
-        // console.log('-------'); // 30次 以至于下面的会调用很多次
-        refresh()
-      })
-
-
+      // const refresh = debounce(this.$refs.scroll.refresh, 50)
+      // // 3.item中图片加载完成
+      // // 对监听的事件进行保存
+      // this.itemImgListener = () => {
+      //   // console.log('-------'); // 30次 以至于下面的会调用很多次
+      //   refresh()
+      // }
+      // this.$bus.$on('itemImageLoad', this.itemImgListener)
     },
     methods: {
       /**

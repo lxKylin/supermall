@@ -27,6 +27,8 @@
 
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from 'network/detail';
 
+  import {itemListenerMixin} from 'common/mixin'
+
   export default {
     name: 'Detail',
     components: {
@@ -40,6 +42,7 @@
       Scroll,
       GoodsList,
     },
+    mixins: [itemListenerMixin],
     data() {
       return {
         iid: null,
@@ -50,6 +53,7 @@
         paramInfo: {},
         commentInfo: {},
         recommends: [],
+        // itemImgListener: null,
       }
     },
     methods: {
@@ -92,8 +96,12 @@
         this.recommends = res.data.list
       })
     },
-
-
+    mounted() {
+      // console.log('----');
+    },
+    destroyed() {
+      this.$bus.$off('itemImgLoad', this.itemImgListener)
+    },
   }
 </script>
 
