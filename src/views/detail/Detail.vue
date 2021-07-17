@@ -1,14 +1,18 @@
 <template>
   <div id="detail">
-    <detail-nav-bar />
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar @titleClick="titleClick" ref="nav" />
+    <scroll class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="contentScroll">
+      <!-- 属性：topImages 传入值：top-images -->
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad" />
-      <detail-param-info :param-info="paramInfo" />
-      <detail-comment-info :comment-info="commentInfo" />
-      <goods-list :goods="recommends" />
+      <detail-param-info :param-info="paramInfo" ref="param" />
+      <detail-comment-info :comment-info="commentInfo" ref="comment" />
+      <goods-list :goods="recommends" ref="recommend" />
     </scroll>
   </div>
 </template>
@@ -28,6 +32,7 @@
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from 'network/detail';
 
   import {itemListenerMixin} from 'common/mixin'
+  import {debounce} from 'common/utils'
 
   export default {
     name: 'Detail',
@@ -54,11 +59,51 @@
         commentInfo: {},
         recommends: [],
         // itemImgListener: null,
+        themeTopYs: [],
+        getThemeTopY: null,
+        currentIndex: 0,
       }
     },
     methods: {
       imageLoad() {
-        this.$refs.scroll.refresh()
+        this.$refs.scroll.refresh();
+        this.getThemeTopY()
+      },
+      titleClick(index) {
+        // console.log(index);
+        this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200)
+      },
+      contentScroll(position) {
+        // console.log(position);
+        // 1.获取y值
+        const positionY = -position.y
+
+        // 2.positionY 和主题中的值进行对比
+        // [0, 3127, 4594, 4792, Number.MAX_VALUE]
+        // console.log(Number.MAX_VALUE);
+        // positionY 在 0 和 3127 之间， index为0
+        // positionY 在 3127 和 4594 之间， index为1
+        // positionY 在 4594 和 4792 之间， index为2
+        // positionY 在 4792 和 一个非常大的值 之间， index为3
+
+        // positionY 超过 4792， index为3
+        let length = this.themeTopYs.length;
+        for (let i = 0; i < length - 1; i++) {
+          // console.log(i);
+          // console.log(this.themeTopYs[i]);
+          // 普通作法
+          // if (this.currentIndex !== i && ((i < length - 1 && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1]) || (i === length - 1 && positionY >= this.themeTopYs[i]))) {
+          //   this.currentIndex = i;
+          //   // console.log(this.currentIndex);
+          //   this.$refs.nav.currentIndex = this.currentIndex;
+          // }
+
+          if (this.currentIndex !== i && (positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1])) {
+            this.currentIndex = i;
+            this.$refs.nav.currentIndex = this.currentIndex;
+          }
+
+        }
       }
     },
     created() {
@@ -88,13 +133,50 @@
         if (data.rate.cRate !== 0) {
           this.commentInfo = data.rate.list[0];
         }
+
+        // 第一次获取 值不对
+        // this.$refs.param.$el压根没有渲染
+        // this.themeTopYs = [];
+        // this.themeTopYs.push(0);
+        // this.themeTopYs.push(this.$refs.param.$el.offsetTop);
+        // this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+        // this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+        // console.log(this.themeTopYs);
+
+        // 第二次获取
+        // this.$nextTick(() => {
+        //   // 根据最新的数据，对于DOM是已经被渲染出来
+        //   // 但是图片依然是没有加载完成
+        //   // offsetTop值不对的时候，都是图片的问题
+        //   this.themeTopYs = [];
+
+        //   this.themeTopYs.push(0);
+        //   this.themeTopYs.push(this.$refs.param.$el.offsetTop);
+        //   this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+        //   this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+
+        //   console.log(this.themeTopYs);
+        // })
+
       })
 
       // 3.请求推荐数据
       getRecommend().then(res => {
-        console.log(res);
+        // console.log(res);
         this.recommends = res.data.list
       })
+
+      // 4.给getThemeTopY赋值 并进行防抖
+      this.getThemeTopY = debounce(() => {
+        this.themeTopYs = [];
+        this.themeTopYs.push(0);
+        this.themeTopYs.push(this.$refs.param.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+        this.themeTopYs.push(Number.MAX_VALUE);
+
+        console.log(this.themeTopYs);
+      }, 100)
     },
     mounted() {
       // console.log('----');
