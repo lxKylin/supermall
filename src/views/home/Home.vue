@@ -209,9 +209,6 @@
 
 <style scoped>
   /* scoped 作用域 只在当前组件生效*/
-  /* #home {
-    padding-top: 44px;
-  } */
   .home-nav {
     color: #fff;
     background-color: var(--color-tint);

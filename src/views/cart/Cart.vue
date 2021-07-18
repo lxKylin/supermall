@@ -10,9 +10,8 @@
       <cart-list />
     </scroll>
 
-
     <!-- 底部汇总 -->
-
+    <cart-bottom-bar />
   </div>
 </template>
 
@@ -21,8 +20,10 @@
   import Scroll from '../../components/common/scroll/Scroll'
 
   import CartList from './childComps/CartList.vue'
+  import CartBottomBar from './childComps/CartBottomBar.vue'
 
   import {mapGetters} from 'vuex'
+
 
   export default {
     name: 'Cart',
@@ -30,6 +31,7 @@
       NavBar,
       CartList,
       Scroll,
+      CartBottomBar,
     },
     computed: {
       // mapGetters 辅助函数仅仅是将store中的getter映射到局部计算属性
@@ -54,7 +56,7 @@
     color: #fff;
   }
   .content {
-    height: calc(100vh - 93px);
+    height: calc(100vh - 93px - 40px);
     overflow: hidden;
   }
 </style>
