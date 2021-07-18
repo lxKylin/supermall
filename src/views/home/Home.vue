@@ -6,8 +6,7 @@
         @tabClick="tabClick"
         ref="tabControl1"
         class="tab-control"
-        v-show="isTabFixed">
-      </tab-control>
+        v-show="isTabFixed" />
 
     <scroll
       class="content"
@@ -21,11 +20,12 @@
         </home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <home-feature-view></home-feature-view>
+
         <tab-control
           :title="['流行', '新款', '精选']"
           @tabClick="tabClick"
-          ref="tabControl2">
-        </tab-control>
+          ref="tabControl2" />
+
         <!-- <goods-list :goods="goods[currentType].list"></goods-list> -->
         <goods-list :goods="showGoods"></goods-list>
     </scroll>
@@ -209,6 +209,10 @@
 
 <style scoped>
   /* scoped 作用域 只在当前组件生效*/
+  #home {
+    height: 100vh;
+    position: relative;
+  }
   .home-nav {
     color: #fff;
     background-color: var(--color-tint);
@@ -220,9 +224,23 @@
     right: 0;
     z-index: 9; */
   }
-  .content {
-    /* 动态计算高度 */
+  /* 法1 */
+  /* 动态计算高度 */
+  /* .content {
     height: calc(100vh - 93px);
     overflow: hidden;
+  } */
+  /* 法2 */
+  .content {
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+  }
+  .tab-control {
+    position: relative;
+    z-index: 9;
   }
 </style>
