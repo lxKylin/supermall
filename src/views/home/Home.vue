@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+    <nav-bar class="home-nav"><div slot="center">蘑菇街</div></nav-bar>
     <tab-control
         :title="['流行', '新款', '精选']"
         @tabClick="tabClick"

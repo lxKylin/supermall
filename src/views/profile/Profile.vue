@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class="profile">
+    <nav-bar class="profile-bar">
+      <div slot="center">个人中心</div>
+    </nav-bar>
     <scroll class="content">
       <ul>
         <li>个人信息1</li>
@@ -60,18 +63,25 @@
 <script>
   import Scroll from 'components/common/scroll/Scroll'
 
+  import NavBar from 'components/common/navbar/NavBar.vue'
+
   export default {
     name: 'Profile',
     components: {
-      Scroll
+      Scroll,
+      NavBar
     }
   }
 </script>
 
 <style scoped>
+  .profile-bar {
+    color: #fff;
+    background-color: var(--color-tint);
+  }
   .content {
-    height: 300px;
-    background-color: aquamarine;
+    /* 动态计算高度 */
+    height: calc(100vh - 93px);
     overflow: hidden;
   }
 </style>

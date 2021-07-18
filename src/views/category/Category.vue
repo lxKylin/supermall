@@ -1,7 +1,11 @@
 <template>
-  <div class="wrapper">
-    <!-- 结构：wrapper里面只能有一个元素content content里可以有多个元素 -->
-    <ul class="content">
+  <div class="category">
+    <nav-bar class="category-bar">
+      <div slot="center">分类</div>
+    </nav-bar>
+    <scroll class="content">
+      <!-- 结构：wrapper里面只能有一个元素content content里可以有多个元素 -->
+    <ul >
     <li>分类列表1</li>
     <li>分类列表2</li>
     <li>分类列表3</li>
@@ -103,47 +107,58 @@
     <li>分类列表99</li>
     <li>分类列表100</li>
     </ul>
+    </scroll>
+
   </div>
 </template>
 
 <script>
-  import BScroll from 'better-scroll'
+  import Scroll from 'components/common/scroll/Scroll'
+
+  import NavBar from 'components/common/navbar/NavBar.vue'
 
   export default {
+  components: { NavBar },
     name: 'Category',
-    data() {
-      return {
-        scroll: null
-      }
+    components: {
+      Scroll,
+      NavBar
     },
+    // data() {
+    //   return {
+    //     scroll: null
+    //   }
+    // },
     // created() 组件创建完后调用 内部DOM元素尚未完成挂载，此时'.wrapper'根本获取不到任何DOM元素，要用mounted
-    mounted() {
-      this.scroll = new BScroll('.wrapper', {
-        // probe 侦测
-        // 3 只要滚动都侦测
-        probeType: 3,
-        pullUpLoad: true,
-        click: true
-      })
-      this.scroll.on('scroll', (position) => {
-        // console.log(position);
-      })
-      this.scroll.on('pullingUp', () => {
-        console.log('上拉加载更多');
-        // setTimeout(() => {
-        //   this.finishPullUp()
-        // }, 2000)
-      })
-    },
+    // mounted() {
+    //   this.scroll = new BScroll('.wrapper', {
+    //     // probe 侦测
+    //     // 3 只要滚动都侦测
+    //     probeType: 3,
+    //     pullUpLoad: true,
+    //     click: true
+    //   })
+    //   this.scroll.on('scroll', (position) => {
+    //     // console.log(position);
+    //   })
+    //   this.scroll.on('pullingUp', () => {
+    //     console.log('上拉加载更多');
+    //     // setTimeout(() => {
+    //     //   this.finishPullUp()
+    //     // }, 2000)
+    //   })
+    // },
   }
 </script>
 
 <style scoped>
+  .category-bar {
+    color: #fff;
+    background-color: var(--color-tint);
+  }
   .wrapper {
-    height: 150px;
-    background-color: aquamarine;
-
-    /* 超出部分会自动隐藏 y轴上可滚动  移动端会很卡顿*/
-    overflow-y: scroll;
+    /* 动态计算高度 */
+    height: calc(100vh - 93px);
+    overflow: hidden;
   }
 </style>
