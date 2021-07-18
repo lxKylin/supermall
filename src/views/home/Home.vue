@@ -17,7 +17,7 @@
       :pull-up-load="true" @pullingUp="loadMore">
         <home-swiper
           :banners="banners"
-          @swiperImageLoad="swiperImageLoad">
+          @swiperImageLoad="swiperImageLoad" v-if="banners.length">
         </home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <home-feature-view></home-feature-view>

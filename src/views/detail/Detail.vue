@@ -6,7 +6,7 @@
       :probe-type="3"
       @scroll="contentScroll">
       <!-- 属性：topImages 传入值：top-images -->
-      <detail-swiper :top-images="topImages" />
+      <detail-swiper :top-images="topImages" v-if="topImages.length" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad" />
@@ -14,7 +14,7 @@
       <detail-comment-info :comment-info="commentInfo" ref="comment" />
       <goods-list :goods="recommends" ref="recommend" />
     </scroll>
-    <detail-bottom-bar />
+    <detail-bottom-bar @addCart="addToCart"/>
     <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
@@ -68,7 +68,6 @@
         themeTopYs: [],
         getThemeTopY: null,
         currentIndex: 0,
-
       }
     },
     methods: {
@@ -114,7 +113,19 @@
         // 3.是否显示回到顶部
         this.isShowBackTop = (-position.y) > 1000
       },
+      addToCart() {
+        // 1.获取购物车需要展示的商品信息
+        const product =  {};
+        product.image = this.topImages[0];
+        product.title = this.goods.title;
+        product.desc = this.goods.desc;
+        product.price = this.goods.realPrice;
+        product.iid = this.iid;
 
+        // 2.将商品添加到购物车
+        // this.$store.commit('addCart', product) //mutations
+        this.$store.dispatch('addCart', product) //actions
+      }
     },
     created() {
       // 1.保存传入的iid
@@ -185,7 +196,7 @@
         this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
         this.themeTopYs.push(Number.MAX_VALUE);
 
-        console.log(this.themeTopYs);
+        // console.log(this.themeTopYs);
       }, 100)
     },
     mounted() {
